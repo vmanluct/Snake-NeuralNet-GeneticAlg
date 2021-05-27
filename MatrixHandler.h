@@ -20,7 +20,7 @@ public:
 	MatrixHandler(int r, int c) {
 		rows = r;
 		cols = c;
-		matrix(rows, cols);
+		matrix = MatrixXf::Constant(rows, cols, 0);
 	}
 	MatrixHandler(MatrixXf m) {
 		matrix = m;
@@ -44,7 +44,7 @@ public:
 
 	MatrixHandler transpose();
 
-	MatrixHandler singleColumnMatrixFromArray(float array[]);
+	MatrixHandler singleColumnMatrixFromArray(float *array);
 
 	void fromArray(float* arr);
 

@@ -7,7 +7,7 @@ void NeuralNet::mutate(float mr)
 	who.mutate(mr);
 }
 
-float* NeuralNet::output(float inputsArr[])
+float* NeuralNet::output(float *inputsArr)
 {
 	MatrixHandler inputs = who.singleColumnMatrixFromArray(inputsArr);
 	MatrixHandler inputsBias = inputs.addBias();

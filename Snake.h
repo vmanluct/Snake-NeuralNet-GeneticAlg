@@ -22,7 +22,7 @@ public:
 
 	NeuralNet brain;
 
-	float *vision;
+	float vision[24];
 	float* decision;
 
 	int growCount;
@@ -46,10 +46,10 @@ public:
 	}
 
 	Snake(int xStart, int yStart, int foodStartX, int foodStartY) {
-		Direction = 0; size = 1; score = 0; Dead = false;
+		Direction = 0; size = 1; score = 1; Dead = false;
 		pos.first = xStart; pos.second = yStart;
-		vel.first = 0; vel.second = -TEXTURE_SIZE;
-		b[0].x = xStart; b[0].y = yStart; foodPos.first = foodStartX; foodPos.second = foodStartY;
+		vel.first = 0; vel.second = -1;
+		b[0].x = xStart; b[0].y = yStart; foodPos.first = xStart+1; foodPos.second = yStart;
 		
 		if (!foodTexture.loadFromFile(foodPath) ||
 			!bodyTexture.loadFromFile(bodyPath)) std::cout << "Error, file not found";
@@ -65,12 +65,13 @@ public:
 		}
 
 		brain = NeuralNet(24, 18, 4);
-		lifeLeft = 200;
+		lifeLeft = 50;
 		lifeTime = 0;
 		fitness = 0;
 
-		//vision = (float*)malloc(sizeof(float) * 24);
-		vision[24];
+		/*vision = new float[24]();
+		decision = new float[4]();*/
+		//vision[24];
 
 	}
 
@@ -96,7 +97,11 @@ public:
 
 	Snake clone();
 
+	bool isOnTail(int x, int y);
+
 	float* lookInDirection(std::pair<int, int> direction); //need to finish
+
+	void look();
    
 };
 

@@ -146,11 +146,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MatrixHandler.cpp" />
     <ClCompile Include="NeuralNet.cpp" />
+    <ClCompile Include="Population.cpp" />
     <ClCompile Include="Snake.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MatrixHandler.h" />
     <ClInclude Include="NeuralNet.h" />
+    <ClInclude Include="Population.h" />
     <ClInclude Include="Snake.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
