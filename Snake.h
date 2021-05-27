@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <vector>
+#include "NeuralNet.h"
 
 #define TEXTURE_SIZE 16
 #define MAX_BODY 100
@@ -8,9 +10,25 @@
 using namespace sf;
 class Snake {
 public:
+	
+	int score;
+	int lifeLeft;
+	int lifeTime;
+	float fitness;
+
+	std::pair<int, int> pos; //position of head
+	std::pair<int, int> vel; //what direction snake will move
+	std::pair<int, int> temp; //temporary vector
+
+	NeuralNet brain;
+
+	float *vision;
+	float* decision;
+
+	int growCount;
+	bool test;
 
 	int Direction, size;
-	float score;
 	bool Dead;
 	std::string foodPath = "Assets/red.png";
 	std::string bodyPath = "Assets/green.png";
@@ -29,7 +47,8 @@ public:
 
 	Snake(int xStart, int yStart, int foodStartX, int foodStartY) {
 		Direction = 0; size = 1; score = 0; Dead = false;
-
+		pos.first = xStart; pos.second = yStart;
+		vel.first = 0; vel.second = -TEXTURE_SIZE;
 		b[0].x = xStart; b[0].y = yStart; foodPos.first = foodStartX; foodPos.second = foodStartY;
 		
 		if (!foodTexture.loadFromFile(foodPath) ||
@@ -44,7 +63,20 @@ public:
 			b[i].x = 0; b[i].y = 0;
 			bodySprite[i].setTexture(bodyTexture);
 		}
+
+		brain = NeuralNet(24, 18, 4);
+		lifeLeft = 200;
+		lifeTime = 0;
+		fitness = 0;
+
+		//vision = (float*)malloc(sizeof(float) * 24);
+		vision[24];
+
 	}
+
+	void mutate(float mr);
+
+	void setVelocity();
 
 	void move(int dir);
 
@@ -57,6 +89,14 @@ public:
 	void ConnectBody();
 
 	void Collision();
+
+	void calcFitness();
+
+	Snake crossover(Snake Partner);
+
+	Snake clone();
+
+	float* lookInDirection(std::pair<int, int> direction); //need to finish
    
 };
 

@@ -6,6 +6,7 @@ int rows = 20;
 int size = 16;
 int w = size * cols;
 int h = size * rows;
+Snake snake = Snake(rand() % 30, rand() % 20, rand() % 30, rand() % 20);
 
 
 using namespace sf;
@@ -13,7 +14,7 @@ using namespace sf;
 int main() {
 	srand(time(0));
 
-	Snake snake = Snake(rand() % 30, rand() % 20, rand() % 30, rand() % 20);
+	//Snake snake = Snake(rand() % 30, rand() % 20, rand() % 30, rand() % 20);
 	/*for (int i = 0; i < 5; i++) {
 		snakes[i] = Snake(rand() % 30, rand() % 20, rand() % 30, rand() % 30);
 	}*/

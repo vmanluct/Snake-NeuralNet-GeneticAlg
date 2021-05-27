@@ -1,6 +1,28 @@
 #include <SFML/Graphics.hpp>
 #include "Snake.h"
 
+void Snake::mutate(float mr)
+{
+    brain.mutate(mr);
+}
+
+void Snake::setVelocity()
+{
+    decision = brain.output(vision);
+
+    float max = 0;
+    int maxIndex = 0;
+    int size = sizeof(decision) / sizeof(decision[0]);
+    for (int i = 0; i < size;i++) {
+        if (max < decision[i]) {
+            max = decision[i];
+            maxIndex = i;
+        }
+    }
+
+    move(maxIndex);
+}
+
 void Snake::move(int dir)
 {
     Direction = dir;
@@ -65,6 +87,64 @@ void Snake::Collision()
     }
     else if (b[0].y < 0) {
         Dead = true; 
+    }
+}
+
+void Snake::calcFitness()
+{
+    if (size < 10) {
+        fitness = floor(lifeTime * lifeTime * pow(2, (floor(size))));
+    }
+    else {
+        fitness = lifeTime * lifeTime;
+        fitness *= pow(2, 10);
+        fitness *= (size - 9);
+    }
+}
+
+Snake Snake::crossover(Snake Partner)
+{
+    Snake child = Snake();
+    child.brain = brain.crossover(Partner.brain);
+
+    return child;
+}
+
+Snake Snake::clone()
+{
+    Snake clone = Snake();
+    clone.brain = brain.clone();
+    clone.Dead = false;
+    return clone;
+}
+
+float* Snake::lookInDirection(std::pair<int, int> direction)
+{
+    float visionInDirection[3];
+
+    std::pair<int, int> position;
+    position.first = pos.first;
+    position.second = pos.second;
+    bool tailIsFound = false;
+    bool foodIsFound = false;
+    float distance = 0;
+
+    position.first += direction.first;
+    position.second += direction.second;
+
+    distance++;
+
+    while (!(position.first < 0 || position.first > 30
+        || position.second < 0 || position.second > 20)) {
+
+        if (!foodIsFound && position.first == foodPos.first &&
+            position.second == foodPos.second) {
+            visionInDirection[0] = 1;
+            foodIsFound = true;
+        }
+
+        if(!tailIsFound) //keep adding here
+
     }
 }
 
