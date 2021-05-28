@@ -8,6 +8,7 @@
 #define MAX_BODY 100
 
 using namespace sf;
+using namespace Eigen;
 class Snake {
 public:
 	
@@ -23,7 +24,7 @@ public:
 	NeuralNet brain;
 
 	float vision[24];
-	float* decision;
+	MatrixXf decision;
 
 	int growCount;
 	bool test;
@@ -46,10 +47,12 @@ public:
 	}
 
 	Snake(int xStart, int yStart, int foodStartX, int foodStartY) {
-		Direction = 0; size = 1; score = 1; Dead = false;
+		Direction = rand()%4; 
+		size = 1; score = 1; Dead = false;
 		pos.first = xStart; pos.second = yStart;
 		vel.first = 0; vel.second = -1;
-		b[0].x = xStart; b[0].y = yStart; foodPos.first = xStart+1; foodPos.second = yStart;
+		b[0].x = xStart; b[0].y = yStart; 
+		foodPos.first = xStart; foodPos.second = yStart;
 		
 		if (!foodTexture.loadFromFile(foodPath) ||
 			!bodyTexture.loadFromFile(bodyPath)) std::cout << "Error, file not found";

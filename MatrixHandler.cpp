@@ -75,12 +75,13 @@ void MatrixHandler::fromArray(float* arr)
 
 float* MatrixHandler::toArray()
 {
-	float* arr = (float*)malloc(sizeof(float) * (rows * cols));
+	float* arr = new float[rows*cols]();
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols;j++) {
 			arr[j + i * cols] = matrix(i, j);
 		}
 	}
+
 	return arr;
 }
 
@@ -156,8 +157,9 @@ MatrixHandler MatrixHandler::crossover(MatrixHandler partner)
 	int randR = floor(rand() % rows + 1);
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-
-			if ((i < randR) || (i == randR && j <= randC)) {
+			double r = ((double)rand() / (RAND_MAX));
+			//std::cout << r << '\n';
+			if(r < 0.5){ 
 				child.matrix(i, j) = matrix(i, j);
 			}
 			else {

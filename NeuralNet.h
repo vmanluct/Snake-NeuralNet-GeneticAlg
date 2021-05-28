@@ -37,7 +37,7 @@ public:
 
 	void mutate(float mr);
 
-	float* output(float *inputsArr);
+	/*float**/MatrixXf output(float *inputsArr);
 
 	NeuralNet crossover(NeuralNet Partner);
 

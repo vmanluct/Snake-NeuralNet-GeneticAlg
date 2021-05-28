@@ -60,7 +60,7 @@ Snake Population::selectSnake()
 
 	for (int i = 0; i < POPULATION_SIZE; i++) {
 		runningSum += snakes[i].fitness;
-		if (runningSum > r) {
+		if (runningSum > r){
 			return snakes[i];
 		}
 	}

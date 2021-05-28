@@ -1,7 +1,7 @@
 #pragma once
 #include "Snake.h"
 
-#define POPULATION_SIZE 1
+#define POPULATION_SIZE 100
 
 class Population
 {
@@ -11,7 +11,7 @@ public:
 	int gen = 1;
 	int globalBest = 1;
 	long globalBestFitness = 0;
-	long globalMutationRate = 0.9;
+	long globalMutationRate = 0.01;
 	int currentBest = 1;
 	int currentBestSnake = 0;
 

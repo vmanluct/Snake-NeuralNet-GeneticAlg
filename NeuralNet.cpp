@@ -7,9 +7,10 @@ void NeuralNet::mutate(float mr)
 	who.mutate(mr);
 }
 
-float* NeuralNet::output(float *inputsArr)
+/*float**/MatrixXf NeuralNet::output(float *inputsArr)
 {
 	MatrixHandler inputs = who.singleColumnMatrixFromArray(inputsArr);
+
 	MatrixHandler inputsBias = inputs.addBias();
 
 	MatrixHandler hiddenInputs = whi.dot(inputsBias);
@@ -26,7 +27,7 @@ float* NeuralNet::output(float *inputsArr)
 
 	MatrixHandler outputs = outputInputs.activate();
 
-	return outputs.toArray();
+	return outputs.matrix;
 }
 
 NeuralNet NeuralNet::crossover(NeuralNet partner)

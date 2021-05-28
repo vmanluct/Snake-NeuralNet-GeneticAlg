@@ -9,13 +9,17 @@ void Snake::mutate(float mr)
 void Snake::setVelocity()
 {
     decision = brain.output(vision);
+    float t1 = decision(0, 0);
+    float t2 = decision(1, 0);
+    float t3 = decision(2, 0);
+    float t4 = decision(3, 0);
 
     float max = 0;
     int maxIndex = 0;
     int size = 4;//sizeof(decision) / sizeof(decision[0]);
     for (int i = 0; i < size;i++) {
-        if (max < decision[i]) {
-            max = decision[i];
+        if (max < decision(i,0)) {
+            max = decision(i,0);
             maxIndex = i;
         }
     }
@@ -27,14 +31,14 @@ void Snake::move(int dir)
 {
     Direction = dir;
     if (dir == 0) { 
+        b[0].x -= 1; 
+        vel.first = -1;
+        vel.second = -0;
+    }
+    else if (dir == 1) {
         b[0].y -= 1; 
         vel.first = 0;
         vel.second = -1;
-    }
-    else if (dir == 1) {
-        b[0].y += 1; 
-        vel.first = 0;
-        vel.second = 1;
     }
     else if (dir == 2) {
         b[0].x += 1;
@@ -42,9 +46,9 @@ void Snake::move(int dir)
         vel.second = 0;
     }
     else if (dir == 3) {
-        b[0].x -= 1;
-        vel.first = -1;
-        vel.second = 0;
+        b[0].y += 1;
+        vel.first = 0;
+        vel.second = 1;
     }
     pos.first = b[0].x; pos.second = b[0].y;
     bodySprite[0].setPosition(b[0].x * TEXTURE_SIZE, b[0].y * TEXTURE_SIZE);
@@ -55,13 +59,15 @@ void Snake::update()
     lifeTime++;
     lifeLeft--;
     if (lifeLeft <= 0) {
+        fitness -= 1000;
         Dead = true;
     }
     else {
+        eat();
         look();
         setVelocity();
         ConnectBody();
-        eat();
+       // eat();
         Collision();
     }
 }
@@ -84,6 +90,7 @@ void Snake::eat()
         b[size].x = b[size - 1].x; b[size].y = b[size - 1].y;
         score++;
         lifeLeft += 100;
+        fitness += 1000;
     }
 }
 
@@ -126,11 +133,19 @@ void Snake::Collision()
 
 void Snake::calcFitness()
 {
+    int x = pos.first - foodPos.first;
+    int y = pos.second - foodPos.second;
+    double xSq = pow(x, 2);
+    double ySq = pow(y, 2);
+    double dist = std::sqrt(xSq + ySq);
+
+    if (dist < 5) fitness += 100;
+
     if (size < 10) {
-        fitness = floor(lifeTime * lifeTime * pow(2, (floor(size))));
+        fitness += floor(lifeTime * lifeTime * pow(2, (floor(size))));
     }
     else {
-        fitness = lifeTime * lifeTime;
+        fitness += lifeTime * lifeTime;
         fitness *= pow(2, 10);
         fitness *= (size - 9);
     }
