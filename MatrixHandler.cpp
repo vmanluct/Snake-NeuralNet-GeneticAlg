@@ -26,6 +26,7 @@ void MatrixHandler::multiply(float n)
 void MatrixHandler::randomize()
 {
 	matrix = MatrixXf::Random(rows, cols);
+
 }
 
 void MatrixHandler::Add(float n)
@@ -138,7 +139,7 @@ void MatrixHandler::mutate(float mutationRate)
 {
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			float r = rand();
+			float r = (rand() % 100);
 			if (r < mutationRate) {
 				matrix(i, j) += rand() / 5;
 

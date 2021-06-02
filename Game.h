@@ -17,6 +17,9 @@ private:
 
 	void initPopulation();
 
+	float prevBestFitness;
+	int count;
+
 public:
 	Game();
 	~Game();

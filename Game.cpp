@@ -10,13 +10,15 @@ void Game::initWindow()
 
 void Game::initPopulation()
 {
-	this->population = new Population(10);
+	this->population = new Population(70);
 }
 
 Game::Game()
 {
 	this->initWindow();
 	this->initPopulation();
+	this->prevBestFitness = 0;
+	this->count = 0;
 }
 
 Game::~Game()

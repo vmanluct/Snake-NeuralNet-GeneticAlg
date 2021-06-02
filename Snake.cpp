@@ -3,8 +3,8 @@
 
 void Snake::initVariables()
 {
-    int xStart = rand() % 30;
-    int yStart = rand() % 20;
+    int xStart = rand() % 25;
+    int yStart = rand() % 15;
     int foodStartX = rand() % 30;
     int foodStartY = rand() % 20;
     pos.first = xStart;
@@ -159,29 +159,28 @@ void Snake::Collision()
     for (int i = 2; i < size; i++) {
         if (b[0].x == b[i].x && b[0].y == b[i].y)
             Dead = true;
-        //lifeTime /= 2;
-        //fitness -= 150;
+        fitness /= 2;
     }
     //Collision with wall
     if (b[0].x >= 30) { 
         Dead = true; 
-        //lifeTime /= 2;
-        //fitness -= 150;
+        //fitness /= 2;
+
     }
     else if (b[0].x <= 0) {
         Dead = true;
-        //lifeTime /= 2;
-        //fitness -= 150;
+       // fitness /= 2;
+
     }
     else if (b[0].y >= 20) {
         Dead = true; 
-        //lifeTime /= 2;
-        //fitness -= 150;
+        //fitness /= 2;
+
     }
     else if (b[0].y <= 0) {
         Dead = true; 
-        //lifeTime /= 2;
-        //fitness -= 150;
+        //fitness /= 2;
+
     }
 }
 
@@ -236,7 +235,7 @@ float* Snake::lookInDirection(std::pair<int, int> direction)
 
         if (!foodIsFound && position.first == foodPos.first &&
             position.second == foodPos.second) {
-            visionInDirection[0] = 1;
+            visionInDirection[0] = 1/distance;
             foodIsFound = true;
         }
 

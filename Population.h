@@ -10,7 +10,7 @@ public:
 	int gen = 1;
 	int globalBest = 1;
 	float globalBestFitness = 0;
-	float globalMutationRate = 0.1;
+	float globalMutationRate = 5;
 	int currentBest = 1;
 	int currentBestSnake = 0;
 	int popSize;

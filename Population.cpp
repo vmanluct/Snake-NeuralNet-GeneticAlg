@@ -116,8 +116,8 @@ void Population::render(RenderTarget& target)
 {
 	if (drawAll) {
 		for (int i = 0; i < this->popSize; i++) {
-			if(snakes[i].Dead == false)
-			snakes[i].render(target);
+			if (snakes[i].Dead == false)
+				snakes[i].render(target);
 		}
 	}
 	else snakes[globalBest].render(target);
