@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MatrixHandler.cpp" />
     <ClCompile Include="NeuralNet.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="Snake.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game.h" />
     <ClInclude Include="MatrixHandler.h" />
     <ClInclude Include="NeuralNet.h" />
     <ClInclude Include="Population.h" />

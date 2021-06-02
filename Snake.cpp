@@ -1,6 +1,56 @@
 #include <SFML/Graphics.hpp>
 #include "Snake.h"
 
+void Snake::initVariables()
+{
+    int xStart = rand() % 30;
+    int yStart = rand() % 20;
+    int foodStartX = rand() % 30;
+    int foodStartY = rand() % 20;
+    pos.first = xStart;
+    pos.second = yStart;
+    vel.first = 0;
+    vel.second = 0;
+    b[0].x = xStart;
+    b[0].y = yStart;
+    foodPos.first = foodStartX;
+    foodPos.second = foodStartY;
+    this->score = 4;
+    this->lifeLeft = 2000;
+    this->lifeTime = 0;
+    this->Direction = 1;//rand() % 4;
+    this->fitness = 0;
+    this->size = 4;
+    this->score = 1;
+    this->Dead = false;
+    this->brain = NeuralNet(24, 18, 4);
+    
+}
+
+void Snake::initTexture()
+{
+    if (!this->bodyTexture.loadFromFile(bodyPath))
+        std::cout << "Could not load body texture";
+    if (!this->foodTexture.loadFromFile(foodPath))
+        std::cout << "Could not load food texture";
+}
+
+void Snake::initSprite()
+{
+    this->foodSprite.setTexture(this->foodTexture);
+    this->foodSprite.setPosition(foodPos.first*TEXTURE_SIZE,foodPos.second*TEXTURE_SIZE);
+    for (int i = 0; i < MAX_BODY; i++) {
+        bodySprite[i].setTexture(bodyTexture);
+    }
+}
+
+Snake::Snake()
+{
+    this->initVariables();
+    this->initTexture();
+    this->initSprite();
+}
+
 void Snake::mutate(float mr)
 {
     brain.mutate(mr);
@@ -16,13 +66,14 @@ void Snake::setVelocity()
 
     float max = 0;
     int maxIndex = 0;
-    int size = 4;//sizeof(decision) / sizeof(decision[0]);
+    int size = 4;
     for (int i = 0; i < size;i++) {
         if (max < decision(i,0)) {
             max = decision(i,0);
             maxIndex = i;
         }
     }
+
 
     move(maxIndex);
 }
@@ -54,31 +105,29 @@ void Snake::move(int dir)
     bodySprite[0].setPosition(b[0].x * TEXTURE_SIZE, b[0].y * TEXTURE_SIZE);
 }
 
-void Snake::update()
+void Snake::updateMovement()
 {
-    lifeTime++;
-    lifeLeft--;
-    if (lifeLeft <= 0) {
-        fitness -= 1000;
-        Dead = true;
+    this->lifeLeft -= 1;
+    this->lifeTime += 1;
+    if (this->lifeLeft <= 0) {
+        this->fitness -= 100;
+        this->Dead = true;
     }
     else {
-        eat();
-        look();
-        setVelocity();
-        ConnectBody();
-       // eat();
-        Collision();
+
+        this->eat();
+        this->look();
+        this->setVelocity();
+        this->ConnectBody();        
+        this->Collision();
     }
 }
 
-void Snake::draw(RenderWindow& window)
+void Snake::update()
 {
-    for (int i = 0; i < size; i++) {
-        window.draw(bodySprite[i]);
-    }
-    window.draw(foodSprite);
+    this->updateMovement();
 }
+
 
 void Snake::eat()
 {
@@ -89,8 +138,8 @@ void Snake::eat()
         foodSprite.setPosition(foodPos.first*TEXTURE_SIZE, foodPos.second*TEXTURE_SIZE);
         b[size].x = b[size - 1].x; b[size].y = b[size - 1].y;
         score++;
-        lifeLeft += 100;
-        fitness += 1000;
+        lifeLeft += 500;
+        fitness += 5000;
     }
 }
 
@@ -110,50 +159,41 @@ void Snake::Collision()
     for (int i = 2; i < size; i++) {
         if (b[0].x == b[i].x && b[0].y == b[i].y)
             Dead = true;
-        lifeTime /= 2;
+        //lifeTime /= 2;
+        //fitness -= 150;
     }
     //Collision with wall
-    if (b[0].x > 30) { 
+    if (b[0].x >= 30) { 
         Dead = true; 
-        lifeTime /= 2;
+        //lifeTime /= 2;
+        //fitness -= 150;
     }
-    else if (b[0].x < 0) {
+    else if (b[0].x <= 0) {
         Dead = true;
-        lifeTime /= 2;
+        //lifeTime /= 2;
+        //fitness -= 150;
     }
-    else if (b[0].y > 20) {
+    else if (b[0].y >= 20) {
         Dead = true; 
-        lifeTime /= 2;
+        //lifeTime /= 2;
+        //fitness -= 150;
     }
-    else if (b[0].y < 0) {
+    else if (b[0].y <= 0) {
         Dead = true; 
-        lifeTime /= 2;
+        //lifeTime /= 2;
+        //fitness -= 150;
     }
 }
 
-void Snake::calcFitness()
+int Snake::calcFitness()
 {
-    int x = pos.first - foodPos.first;
-    int y = pos.second - foodPos.second;
-    double xSq = pow(x, 2);
-    double ySq = pow(y, 2);
-    double dist = std::sqrt(xSq + ySq);
-
-    if (dist < 5) fitness += 100;
-
-    if (size < 10) {
-        fitness += floor(lifeTime * lifeTime * pow(2, (floor(size))));
-    }
-    else {
-        fitness += lifeTime * lifeTime;
-        fitness *= pow(2, 10);
-        fitness *= (size - 9);
-    }
+    fitness = fitness * size + score + lifeTime;
+    return fitness;
 }
 
 Snake Snake::crossover(Snake Partner)
 {
-    Snake child = Snake(rand()%30, rand()%20, rand()%30,rand()%20);
+    Snake child = Snake();
     child.brain = brain.crossover(Partner.brain);
 
     return child;
@@ -161,7 +201,7 @@ Snake Snake::crossover(Snake Partner)
 
 Snake Snake::clone()
 {
-    static Snake clone = Snake(rand()%30, rand()%20, rand()%30, rand()%20);
+    Snake clone = Snake();
     clone.brain = brain.clone();
     clone.Dead = false;
     return clone;
@@ -261,6 +301,14 @@ void Snake::look()
     vision[21] = tempVision[0];
     vision[22] = tempVision[1];
     vision[23] = tempVision[2];
+}
+
+void Snake::render(RenderTarget& target)
+{
+    for (int i = 0; i < size; i++) {
+        target.draw(bodySprite[i]);
+    }
+    target.draw(foodSprite);
 }
 
 

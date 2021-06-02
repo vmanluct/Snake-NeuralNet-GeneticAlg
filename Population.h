@@ -1,7 +1,6 @@
 #pragma once
 #include "Snake.h"
 
-#define POPULATION_SIZE 100
 
 class Population
 {
@@ -10,10 +9,12 @@ public:
 	bool drawAll = true;
 	int gen = 1;
 	int globalBest = 1;
-	long globalBestFitness = 0;
-	long globalMutationRate = 0.01;
+	float globalBestFitness = 0;
+	float globalMutationRate = 0.1;
 	int currentBest = 1;
 	int currentBestSnake = 0;
+	int popSize;
+	float fitnessSum = 0;
 
 	Snake globalBestSnake;
 
@@ -22,11 +23,12 @@ public:
 	}
 
 	Population(int size) {
-		size = POPULATION_SIZE;
+		srand(time(0));
+		this->popSize = size;
 		snakes = new Snake[size];
 
-		for (int i = 0; i < size; i++) {
-			snakes[i] = Snake(rand()%30, rand()%20, rand()%30, rand()%20);
+		for (int i = 0; i < this->popSize; i++) {
+			snakes[i] = Snake();
 		}
 		globalBestSnake = snakes[0].clone();
 	}
@@ -47,6 +49,6 @@ public:
 
 	void setCurrentBest();
 
-	void draw(RenderWindow& window);
+	void render(RenderTarget& target);
 };
 
