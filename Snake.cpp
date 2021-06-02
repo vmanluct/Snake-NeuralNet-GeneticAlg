@@ -23,7 +23,7 @@ void Snake::initVariables()
     this->size = 4;
     this->score = 1;
     this->Dead = false;
-    this->brain = NeuralNet(24, 18, 4);
+    this->brain = NeuralNet(24, 32, 4);
     
 }
 
@@ -50,6 +50,7 @@ Snake::Snake()
     this->initTexture();
     this->initSprite();
 }
+
 
 void Snake::mutate(float mr)
 {
@@ -159,27 +160,27 @@ void Snake::Collision()
     for (int i = 2; i < size; i++) {
         if (b[0].x == b[i].x && b[0].y == b[i].y)
             Dead = true;
-        fitness /= 2;
+        fitness -= 500;
     }
     //Collision with wall
-    if (b[0].x >= 30) { 
+    if (b[0].x > 30) { 
         Dead = true; 
-        //fitness /= 2;
+        fitness -= 500;
 
     }
-    else if (b[0].x <= 0) {
+    else if (b[0].x < 0) {
         Dead = true;
-       // fitness /= 2;
+        fitness -= 500;
 
     }
-    else if (b[0].y >= 20) {
+    else if (b[0].y > 20) {
         Dead = true; 
-        //fitness /= 2;
+        fitness -= 500;
 
     }
-    else if (b[0].y <= 0) {
+    else if (b[0].y < 0) {
         Dead = true; 
-        //fitness /= 2;
+        fitness -= 500;
 
     }
 }
@@ -236,6 +237,7 @@ float* Snake::lookInDirection(std::pair<int, int> direction)
         if (!foodIsFound && position.first == foodPos.first &&
             position.second == foodPos.second) {
             visionInDirection[0] = 1/distance;
+            fitness += ((1 - (1 / distance))*1000);
             foodIsFound = true;
         }
 

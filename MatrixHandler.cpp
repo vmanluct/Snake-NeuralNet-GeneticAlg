@@ -101,7 +101,7 @@ MatrixHandler MatrixHandler::activate()
 	MatrixHandler n = MatrixHandler(rows, cols);
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols;j++) {
-			n.matrix(i, j) = sigmoid(matrix(i, j));
+			n.matrix(i, j) = relu(matrix(i, j));
 		}
 	}
 	return n;
@@ -112,6 +112,14 @@ float MatrixHandler::sigmoid(float x)
 	float y = 1 / (1 + exp(-x));
 	return y;
 }
+
+float MatrixHandler::relu(float x)
+{
+	if (x > 0)
+		return x;
+	else return 0;
+}
+
 
 MatrixHandler MatrixHandler::sigmoidDerived()
 {
