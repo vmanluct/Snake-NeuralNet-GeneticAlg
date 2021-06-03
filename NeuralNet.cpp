@@ -1,5 +1,9 @@
 #include "NeuralNet.h"
 
+NeuralNet::~NeuralNet()
+{
+}
+
 void NeuralNet::mutate(float mr)
 {
 	whi.mutate(mr);

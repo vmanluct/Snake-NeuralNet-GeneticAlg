@@ -34,6 +34,7 @@ public:
 		whh.randomize();
 		who.randomize();
 	}
+	~NeuralNet();
 
 	void mutate(float mr);
 

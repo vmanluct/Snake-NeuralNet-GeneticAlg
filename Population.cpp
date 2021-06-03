@@ -3,8 +3,9 @@
 void Population::updateAlive()
 {
 	for (int i = 0; i < this->popSize; i++) {
-		if (!snakes[i].Dead)
+		if (!snakes[i].Dead) {
 			snakes[i].update();
+		}
 	}
 	setCurrentBest();
 }
@@ -40,24 +41,26 @@ void Population::naturalSelection()
 		child.mutate(globalMutationRate);
 		newSnakes[i] = child;
 
+
 		//snakes[i] = newSnakes[i].clone();
 	}
 	fitnessSum = 0;
 	snakes = newSnakes;
 	gen += 1;
-	currentBest = 4;
+	currentBest = 1;
 }
 
 Snake Population::selectSnake()
 {
 	float r = (rand()) % (int)fitnessSum;
 	float summation = 0;
-	for (int i = 1; i < this->popSize; i++) {
+	for (int i = 0; i < this->popSize; i++) {
 		summation += snakes[i].fitness;
-		if (summation > r)
+		if (summation > r ) {
 			return snakes[i];
+		}
 	}
-	return snakes[rand()%this->popSize];
+	//return globalBestSnake;
 }
 
 void Population::setBestSnake()
@@ -75,6 +78,7 @@ void Population::setBestSnake()
 		globalBestFitness = max;
 		globalBestSnake = snakes[maxIndex].clone();
 	}
+
 }
 
 void Population::mutate()
@@ -90,18 +94,18 @@ void Population::setCurrentBest()
 		float max = 0;
 		int maxIndex = 0;
 		for (int i = 0; i < this->popSize; i++) {
-			if (!snakes[i].Dead && snakes[i].size > max) {
-				max = snakes[i].size;
+			if (!snakes[i].Dead && snakes[i].score > max) {
+				max = snakes[i].score;
 				maxIndex = i;
 			}
 		}
 
 		if (max > currentBest) {
-			currentBest = floor(max);
+			currentBest = max;
 		}
 
 		if (snakes[currentBestSnake].Dead ||
-			max > snakes[currentBestSnake].size + 5) {
+			max > snakes[currentBestSnake].score + 5) {
 			currentBestSnake = maxIndex;
 		}
 
@@ -120,5 +124,5 @@ void Population::render(RenderTarget& target)
 				snakes[i].render(target);
 		}
 	}
-	else snakes[globalBest].render(target);
+	else snakes[0].render(target);
 }

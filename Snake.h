@@ -18,6 +18,13 @@ private:
 	void initTexture();
 	void initSprite();
 
+	float distanceToApple;
+	float movesScore;
+	float penalty;
+	int sameMoveCount;
+
+	float calcDistanceToApple();
+
 public:
 	
 	int score;
@@ -45,10 +52,11 @@ public:
 	std::pair<int, int> foodPos;
 
 
-	Sprite bodySprite[100];
-	Sprite foodSprite;
+	RectangleShape bodySprite[100];
+	RectangleShape foodSprite;
 
 	Snake();
+	~Snake();
 
 	void mutate(float mr);
 

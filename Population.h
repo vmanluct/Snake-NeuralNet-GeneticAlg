@@ -8,10 +8,10 @@ public:
 	Snake* snakes;
 	bool drawAll = true;
 	int gen = 1;
-	int globalBest = 1;
+	int globalBest = 0;
 	float globalBestFitness = 0;
-	float globalMutationRate = 10;
-	int currentBest = 1;
+	float globalMutationRate = 30;
+	int currentBest = 0;
 	int currentBestSnake = 0;
 	int popSize;
 	float fitnessSum = 0;

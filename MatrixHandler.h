@@ -28,6 +28,8 @@ public:
 		cols = m.cols();
 	}
 
+	~MatrixHandler();
+
 	void output();
 
 	void multiply(float n);

@@ -10,7 +10,7 @@ void Game::initWindow()
 
 void Game::initPopulation()
 {
-	this->population = new Population(70);
+	this->population = new Population(50);
 }
 
 Game::Game()
@@ -31,7 +31,8 @@ void Game::updatePopulation()
 	if (this->population->done()) {
 		this->population->calculateFitness();
 		std::cout << this->population->gen <<  " Global best fitness is: ";
-		std::cout << this->population->globalBestFitness << '\n';
+		std::cout << this->population->globalBestFitness << " ";
+		std::cout << " Global best score is " <<this->population->globalBest << '\n';
 		this->population->naturalSelection();
 	}
 }

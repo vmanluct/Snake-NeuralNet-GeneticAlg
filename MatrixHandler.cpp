@@ -1,5 +1,12 @@
 #include "MatrixHandler.h"
 
+MatrixHandler::~MatrixHandler()
+{
+	matrix(0, 0);
+	rows = 0;
+	cols = 0;
+}
+
 void MatrixHandler::output()
 {
 	for (int i = 0; i < rows;i++) {
@@ -149,10 +156,15 @@ void MatrixHandler::mutate(float mutationRate)
 		for (int j = 0; j < cols; j++) {
 			float r = (rand() % 100);
 			if (r < mutationRate) {
-				matrix(i, j) += rand() / 5;
+				matrix(i, j) += rand()/5;
+				float test = matrix(i, j);
 
-				if (matrix(i, j) > 1) matrix(i, j) = 1;
-				if (matrix(i, j) < -1) matrix(i, j) = -1;
+				if (matrix(i, j) > 1) {
+					matrix(i, j) = 1;
+				}
+				if (matrix(i, j) < -1) {
+					matrix(i, j) = -1;
+				}
 			}
 		}
 	}
@@ -167,7 +179,6 @@ MatrixHandler MatrixHandler::crossover(MatrixHandler partner)
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			double r = ((double)rand() / (RAND_MAX));
-			//std::cout << r << '\n';
 			if(r < 0.5){ 
 				child.matrix(i, j) = matrix(i, j);
 			}
