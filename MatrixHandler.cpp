@@ -157,7 +157,6 @@ void MatrixHandler::mutate(float mutationRate)
 			float r = (rand() % 100);
 			if (r < mutationRate) {
 				matrix(i, j) += rand()/5;
-				float test = matrix(i, j);
 
 				if (matrix(i, j) > 1) {
 					matrix(i, j) = 1;
@@ -192,7 +191,7 @@ MatrixHandler MatrixHandler::crossover(MatrixHandler partner)
 
 MatrixHandler MatrixHandler::clone()
 {
-	MatrixHandler clone = MatrixHandler(rows, cols);
+	MatrixHandler clone =  MatrixHandler(rows, cols);
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			clone.matrix(i, j) = matrix(i, j);

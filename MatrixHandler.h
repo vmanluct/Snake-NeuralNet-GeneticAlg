@@ -46,7 +46,7 @@ public:
 
 	MatrixHandler transpose();
 
-	MatrixHandler singleColumnMatrixFromArray(float *array);
+	MatrixHandler singleColumnMatrixFromArray(float* array);
 
 	void fromArray(float* arr);
 

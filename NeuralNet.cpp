@@ -2,6 +2,9 @@
 
 NeuralNet::~NeuralNet()
 {
+	/*delete whi;
+	delete whh;
+	delete who;*/
 }
 
 void NeuralNet::mutate(float mr)
@@ -11,7 +14,7 @@ void NeuralNet::mutate(float mr)
 	who.mutate(mr);
 }
 
-/*float**/MatrixXf NeuralNet::output(float *inputsArr)
+ MatrixXf NeuralNet::output(float *inputsArr)
 {
 	MatrixHandler inputs = who.singleColumnMatrixFromArray(inputsArr);
 
@@ -51,4 +54,67 @@ NeuralNet NeuralNet::clone()
 	clone.who = who.clone();
 
 	return clone;
+}
+
+bool NeuralNet::writeRecordToFile(std::string file_name)
+{
+	float* inpArr = whi.toArray();
+	int inpSize = whi.rows * whi.cols;
+	
+	float* hidArr = whh.toArray();
+	int hidSize = whh.rows * whh.cols;
+
+	float* outArr = who.toArray();
+	int outSize = who.rows * who.cols;
+
+	std::ofstream file;
+	file.open(file_name);
+	for (int count = 0; count < inpSize; count++) {
+		file << inpArr[count] << " ";
+	}
+	file << '\n';
+	for (int count = 0; count < hidSize; count++) {
+		file << hidArr[count] << " ";
+	}
+	file << '\n';
+	for (int count = 0; count < outSize; count++) {
+		file << hidArr[count] << " ";
+	}
+	file.close();
+	return true;
+}
+
+bool NeuralNet::readFiletoNetwork(std::string file_name)
+{
+	float* inpArr = whi.toArray();
+	int inpSize = whi.rows * whi.cols;
+
+	float* hidArr = whh.toArray();
+	int hidSize = whh.rows * whh.cols;
+
+	float* outArr = who.toArray();
+	int outSize = who.rows * who.cols;
+
+	std::ifstream file(file_name);
+	if (file.is_open()) {
+		while (!file.eof()) {
+			for (int i = 0; i < inpSize; i++) {
+				file >> inpArr[i];
+			}
+			whi.fromArray(inpArr);
+			for (int i = 0; i < hidSize; i++) {
+				file >> inpArr[i];
+			}
+			whh.fromArray(hidArr);
+			for (int i = 0; i < outSize; i++) {
+				file >> inpArr[i];
+			}
+			who.fromArray(outArr);
+		}
+		return true;
+	}
+	else {
+		std::cout << "Did not open file";
+		return false;
+	}
 }

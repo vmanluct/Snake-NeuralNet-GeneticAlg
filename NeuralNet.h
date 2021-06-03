@@ -1,9 +1,10 @@
 #pragma once
 #include <Eigen/Dense>
+#include <iostream>
+#include <fstream>
 #include "MatrixHandler.h"
 
 using namespace Eigen;
-
 class NeuralNet
 {
 public:
@@ -38,10 +39,14 @@ public:
 
 	void mutate(float mr);
 
-	/*float**/MatrixXf output(float *inputsArr);
+	MatrixXf output(float *inputsArr);
 
 	NeuralNet crossover(NeuralNet Partner);
 
 	NeuralNet clone();
+
+	bool writeRecordToFile(std::string file_name);
+
+	bool readFiletoNetwork(std::string file_name);
 };
 

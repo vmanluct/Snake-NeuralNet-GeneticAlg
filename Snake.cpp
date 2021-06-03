@@ -73,6 +73,7 @@ Snake::Snake()
 
 Snake::~Snake()
 {
+   // delete brain;
 }
 
 

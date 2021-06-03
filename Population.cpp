@@ -38,7 +38,9 @@ void Population::naturalSelection()
 		Snake parent2 = selectSnake();
 
 		Snake child = parent1.crossover(parent2);
-		child.mutate(globalMutationRate);
+		if (i >= globalMutationRate) {
+			child.mutate(globalMutationRate / 5);
+		}
 		newSnakes[i] = child;
 
 
