@@ -24,6 +24,7 @@ public:
 
 	Population(int size) {
 		srand(time(0));
+
 		this->popSize = size;
 		snakes = new Snake[size];
 

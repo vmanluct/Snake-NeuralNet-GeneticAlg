@@ -111,14 +111,14 @@ void Snake::setVelocity()
 
 void Snake::move(int dir)
 {
-   // Direction = dir;
-    if (dir == 0 && Direction != 2) { 
-        b[0].x -= 1; 
+    // Direction = dir;
+    if (dir == 0 && Direction != 2) {
+        b[0].x -= 1;
         vel.first = -1;
         vel.second = -0;
     }
     else if (dir == 1 && Direction != 3) {
-        b[0].y -= 1; 
+        b[0].y -= 1;
         vel.first = 0;
         vel.second = -1;
     }
@@ -135,16 +135,22 @@ void Snake::move(int dir)
     Direction = dir;
     pos.first = b[0].x; pos.second = b[0].y;
     bodySprite[0].setPosition(b[0].x * TEXTURE_SIZE, b[0].y * TEXTURE_SIZE);
-    
+
     float newDistToApple = calcDistanceToApple();
-    if (distanceToApple > newDistToApple) {
-        movesScore += 400;
-    }   
+    /*if (distanceToApple > newDistToApple) {
+        //lifeTime += 10;
+    } */
     if (sameMoveCount > 5) {
         movesScore /= 1.5;
     }
 
     distanceToApple = newDistToApple;
+    if (distanceToApple < 3) {
+        lifeTime += 3;
+    }
+    /*if (distanceToApple >= 15) {
+        lifeTime -= 1;
+    }*/
 }
 
 void Snake::updateMovement()
@@ -158,6 +164,7 @@ void Snake::updateMovement()
     else {
         this->ConnectBody();
         this->look();
+        //move(Direction);
         this->setVelocity();
         this->eat();       
         this->Collision();
@@ -200,35 +207,35 @@ void Snake::Collision()
     for (int i = 2; i < size; i++) {
         if (b[0].x == b[i].x && b[0].y == b[i].y) {
            Dead = true;
-            penalty = 0.9;
+            //penalty = 0.9;
         }
     }
     //Collision with wall
     if (b[0].x > 30) { 
         Dead = true; 
         //b[0].x = 0;
-        penalty = 0.2;
+        //penalty = 0.8;
 
 
     }
     else if (b[0].x < 0) {
         Dead = true;
         //b[0].x = 30;
-        penalty = 0.2;
+       // penalty = 0.8;
 
 
     }
     else if (b[0].y > 20) {
         Dead = true; 
         //b[0].y = 0;
-        penalty = 0.2;
+       // penalty = 0.8;
 
 
     }
     else if (b[0].y < 0) {
         Dead = true; 
         //b[0].y = 20;
-        penalty = 0.2;
+        //penalty = 0.8;
 
 
     }
@@ -239,7 +246,19 @@ int Snake::calcFitness()
     //fitness = score*5000 + lifeTime*lifeTime + movesScore*penalty;
     /*if (fitness < 0)
         std::cout << "Negative \n";*/
-    fitness = lifeTime*lifeTime*powf(2,size-3);
+    if (lifeTime < 50) {
+        penalty = 0.2;
+    }
+    else if (lifeTime < 200) {
+        penalty = 0.5;
+    }
+    else if (lifeLeft < 500) {
+        penalty = 0.8;
+    }
+    else {
+        penalty = 1;
+    }
+    fitness = (lifeTime * lifeTime * powf(2,size-3))*penalty;
     return fitness;
 }
 

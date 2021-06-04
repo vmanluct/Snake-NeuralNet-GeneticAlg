@@ -1,5 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <fstream>
 #include "Population.h"
 
 using namespace sf;
