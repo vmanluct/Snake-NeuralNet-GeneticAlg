@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Population.h"
 
 void Population::updateAlive()
@@ -23,6 +24,8 @@ void Population::calculateFitness()
 	for (int i = 0; i < this->popSize; i++) {
 		fitnessSum += snakes[i].calcFitness();
 	}
+	std::sort(snakes, snakes + this->popSize, [](Snake const& a, Snake const& b)->bool 
+		{return a.fitness > b.fitness;});
 }
 
 void Population::naturalSelection()
@@ -33,18 +36,20 @@ void Population::naturalSelection()
 	newSnakes[0] = globalBestSnake.clone();
 
 
-	for (int i = 1; i < this->popSize; i++) {
-		Snake parent1 = selectSnake();
-		Snake parent2 = selectSnake();
-
-		Snake child = parent1.crossover(parent2);
-		if (i >= globalMutationRate) {
-			child.mutate(globalMutationRate / 5);
+	for (int i = 0; i < this->popSize; i++) {
+		if (i < 5) {
+			newSnakes[i] = snakes[i].clone();
 		}
-		newSnakes[i] = child;
+		else {
+			Snake parent1 = selectSnake();
+			Snake parent2 = selectSnake();
 
-
-		//snakes[i] = newSnakes[i].clone();
+			Snake child = parent1.crossover(parent2);
+			if (rand()%100 < globalMutationRate) {
+				child.mutate(5);
+			}
+			newSnakes[i] = child;
+		}
 	}
 	fitnessSum = 0;
 	snakes = newSnakes;
@@ -54,15 +59,15 @@ void Population::naturalSelection()
 
 Snake Population::selectSnake()
 {
-	float r = (rand()) % (int)fitnessSum;
+	/*float r = (rand()) % (int)fitnessSum;
 	float summation = 0;
 	for (int i = 0; i < this->popSize; i++) {
 		summation += snakes[i].fitness;
 		if (summation > r ) {
 			return snakes[i];
 		}
-	}
-	//return globalBestSnake;
+	}*/
+	return snakes[rand() % 10];
 }
 
 void Population::setBestSnake()

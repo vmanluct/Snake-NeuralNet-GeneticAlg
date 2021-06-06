@@ -5,7 +5,7 @@
 #include "NeuralNet.h"
 
 #define TEXTURE_SIZE 16
-#define MAX_BODY 100
+#define MAX_BODY 20
 
 using namespace sf;
 using namespace Eigen;
@@ -19,9 +19,7 @@ private:
 	void initSprite();
 
 	float distanceToApple;
-	float movesScore;
 	float penalty;
-	int sameMoveCount;
 
 	float calcDistanceToApple();
 
@@ -52,7 +50,7 @@ public:
 	std::pair<int, int> foodPos;
 
 
-	RectangleShape bodySprite[100];
+	RectangleShape bodySprite[MAX_BODY];
 	RectangleShape foodSprite;
 
 	Snake();

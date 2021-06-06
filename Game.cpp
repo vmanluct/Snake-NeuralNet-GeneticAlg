@@ -66,9 +66,9 @@ void Game::update()
 	}
 
 	if (this->population->gen == 1) {
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 			this->population->snakes[i].brain.readFiletoNetwork("BestSnakeBrain/DNA.txt");
-			this->population->snakes[i].mutate(20);
+			this->population->snakes[i].mutate(50);
 		}
 	}
 

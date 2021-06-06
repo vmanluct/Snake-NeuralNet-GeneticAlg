@@ -15,8 +15,6 @@ void Snake::initVariables()
     b[0].y = yStart;
     foodPos.first = foodStartX;
     foodPos.second = foodStartY;
-    this->sameMoveCount = 0;
-    this->movesScore = 0;
     this->penalty = 0;
     this->distanceToApple = calcDistanceToApple();
     this->lifeLeft = 200;
@@ -26,7 +24,7 @@ void Snake::initVariables()
     this->size = 4;
     this->score = 0;
     this->Dead = false;
-    this->brain = NeuralNet(24, 20, 4);
+    this->brain = NeuralNet(24, 24, 4);
     
 }
 
@@ -40,11 +38,6 @@ void Snake::initTexture()
 
 void Snake::initSprite()
 {
-    /*this->foodSprite.setTexture(this->foodTexture);
-    this->foodSprite.setPosition(foodPos.first*TEXTURE_SIZE,foodPos.second*TEXTURE_SIZE);
-    for (int i = 0; i < MAX_BODY; i++) {
-        bodySprite[i].setTexture(bodyTexture);
-    }*/
     Color color = Color(rand() % 255, rand() % 255, rand() % 255);
     foodSprite.setSize({ 16, 16 });
     foodSprite.setFillColor(color);
@@ -99,12 +92,6 @@ void Snake::setVelocity()
             maxIndex = i;
         }
     }
-    if (maxIndex == Direction) {
-        sameMoveCount += 1;
-    }
-    else {
-        sameMoveCount = 0;
-    }
 
     move(maxIndex);
 }
@@ -137,20 +124,18 @@ void Snake::move(int dir)
     bodySprite[0].setPosition(b[0].x * TEXTURE_SIZE, b[0].y * TEXTURE_SIZE);
 
     float newDistToApple = calcDistanceToApple();
-    /*if (distanceToApple > newDistToApple) {
-        //lifeTime += 10;
-    } */
-    if (sameMoveCount > 5) {
-        movesScore /= 1.5;
+    if (distanceToApple > newDistToApple) {
+        fitness += 2;
+        lifeLeft += 2;
+    } 
+    else
+    {
+        lifeLeft -= 2;
     }
-
     distanceToApple = newDistToApple;
     if (distanceToApple < 3) {
-        lifeTime += 3;
+        lifeLeft += 3;
     }
-    /*if (distanceToApple >= 15) {
-        lifeTime -= 1;
-    }*/
 }
 
 void Snake::updateMovement()
@@ -158,7 +143,7 @@ void Snake::updateMovement()
     this->lifeLeft -= 1;
     this->lifeTime += 1;
     if (this->lifeLeft <= 0) {
-        penalty = 1;
+        penalty = 0.8;
         this->Dead = true;
     }
     else {
@@ -186,8 +171,8 @@ void Snake::eat()
         foodSprite.setPosition(foodPos.first*TEXTURE_SIZE, foodPos.second*TEXTURE_SIZE);
         b[size].x = b[size - 1].x; b[size].y = b[size - 1].y;
         score++;
-        lifeLeft += 100;
-        movesScore += 500;
+        lifeLeft += 200;
+        fitness += 10;
     }
 }
 
@@ -207,37 +192,20 @@ void Snake::Collision()
     for (int i = 2; i < size; i++) {
         if (b[0].x == b[i].x && b[0].y == b[i].y) {
            Dead = true;
-            //penalty = 0.9;
         }
     }
     //Collision with wall
     if (b[0].x > 30) { 
         Dead = true; 
-        //b[0].x = 0;
-        //penalty = 0.8;
-
-
     }
     else if (b[0].x < 0) {
         Dead = true;
-        //b[0].x = 30;
-       // penalty = 0.8;
-
-
     }
     else if (b[0].y > 20) {
         Dead = true; 
-        //b[0].y = 0;
-       // penalty = 0.8;
-
-
     }
     else if (b[0].y < 0) {
         Dead = true; 
-        //b[0].y = 20;
-        //penalty = 0.8;
-
-
     }
 }
 
@@ -252,13 +220,13 @@ int Snake::calcFitness()
     else if (lifeTime < 200) {
         penalty = 0.5;
     }
-    else if (lifeLeft < 500) {
+    else if (lifeTime < 500) {
         penalty = 0.8;
     }
     else {
         penalty = 1;
     }
-    fitness = (lifeTime * lifeTime * powf(2,size-3))*penalty;
+    fitness += (lifeTime * lifeTime * powf(2,size-3))*penalty;
     return fitness;
 }
 
