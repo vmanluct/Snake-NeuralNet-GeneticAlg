@@ -13,23 +13,33 @@ private:
 	VideoMode videoMode;
 	Event ev;
 
-	Population* population;
+	Population* population; //All snakes for evolution
 
-	void initWindow();
+	void initWindow(); //Create window for game
+	void initPopulation(); //Add snakes to population
 
-	void initPopulation();
-
-	float prevBestFitness;
+	//Neural Network stuff
+	float prevBest;
 	int count;
 
-public:
-	Game();
-	~Game();
+	//Neural Network Graphics
+	RenderWindow netWindow;
+	VideoMode netMode;
+	Event netEb;
 
-	void updatePopulation();
-	void update();
-	void renderPopulation();
-	void render();
+	void initNNWindow(); //Create window for neural network
+
+public:
+	Game(); //Constructor
+	~Game(); //Destructor
+
+	void updatePopulation(); //Update positions of snakes
+	void update(); //update everything to the windows
+	void renderPopulation(); //Draw all the snakes to the window
+	void render(); //Draw game and neural network
+
+	//Getter functions
 	const RenderWindow& getWindow();
+	const RenderWindow& getNNWindow();
 };
 

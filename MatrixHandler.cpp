@@ -64,7 +64,7 @@ MatrixHandler MatrixHandler::transpose()
 
 MatrixHandler MatrixHandler::singleColumnMatrixFromArray(float *arr)
 {
-	int size = 24;//sizeof(arr) / sizeof(arr[0]);
+	int size = 11;//sizeof(arr) / sizeof(arr[0]);
 	MatrixHandler n = MatrixHandler(size, 1);
 	for (int i = 0; i < size; i++) {
 		n.matrix(i, 0) = arr[i];
